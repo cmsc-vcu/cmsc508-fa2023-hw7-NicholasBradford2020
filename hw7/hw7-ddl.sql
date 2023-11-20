@@ -18,7 +18,10 @@
 
 SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS people;
-# ... 
+DROP TABLE IF EXISTS skills;
+DROP TABLE IF EXISTS peopleskills;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS peopleroles;
 SET FOREIGN_KEY_CHECKS=1;
 
 # Section 2
@@ -28,12 +31,30 @@ SET FOREIGN_KEY_CHECKS=1;
 # time committment offers some sense of how much time was required (or will be required) to gain the skill.
 # You can assign the skill descriptions.  Please be creative!
 
+CREATE TABLE skills (
+    skills_id int NOT NULL,
+    skills_name varchar(255) NOT NULL,
+    skills_description varchar(255) NOT NULL,
+    skills_tag varchar(255) NOT NULL,
+    skills_url varchar(4096),
+    skills_time_commitment int,
+    PRIMARY KEY (skills_id)
+);
 
 # Section 3
 # Populate skills
 # Populates the skills table with eight skills, their tag fields must exactly contain “Skill 1”, “Skill 2”, etc.
 # You can assign skill names.  Please be creative!
 
+INSERT INTO skills (skills_id,skills_name,skills_description,skills_tag,skills_url,skills_time_commitment) VALUES
+    (1, "Sharpening", "Proficient in skill of sharpening blades", "Skill 1", "https://bonika.com/collections/training-in-sharpening", 3),
+    (2, "Stropping", "Proficient in skill of stroping blades", "Skill 2", "https://www.instructables.com/Stropping-101-Heres-How-to-Strop-Your-Knives-in-5-/", 6),
+    (3, "Forging", "Proficient in skill of forging blades and other metals", "Skill 3", "https://www.forging.org/types-of-forging-processes", 12),
+    (4, "Tempering", "Proficient in skill of tempering metals", "Skill 4", "https://www.thyssenkrupp-materials.co.uk/technical-knowledge-hub/tempering", 2),
+    (5, "Karaoke", "Nationally recognized karaoke performer", "Skill 5", "https://pep.rocks/programs", 60),
+    (6, "Drumming", "Played Drums for a high school band", "Skill 6", "https://www.musicca.com/drums", 4),
+    (7, "Music Production", "Music Production experience", "Skill 7", "https://online.berklee.edu/certificates/interest/music-production", 120),
+    (8, "Music Marketing", "Advertised for music companies to sell records", "Skill 8", "https://www.coursera.org/professional-certificates/google-digital-marketing-ecommerce?utm_medium=sem&utm_source=gg&utm_campaign=B2C_NAMER_google-digital-marketing-ecommerce_google_FTCOF_professional-certificates_country-US&campaignid=17072777199&adgroupid=137506396553&device=c&keyword=marketing%20certifications&matchtype=b&network=g&devicemodel=&adposition=&creativeid=595240703022&hide_mobile_promo&gclid=CjwKCAiAgeeqBhBAEiwAoDDhn41AhVo1VFM3MzIp1q22_TUqGjPrcxe9ROQzevkpRuc4hTLp4zn1gBoCFU4QAvD_BwE", 10);
 
 # Section 4
 # Create people( id,first_name, last_name, email, linkedin_url, headshot_url, discord_handle, brief_bio, date_joined)
@@ -41,9 +62,17 @@ SET FOREIGN_KEY_CHECKS=1;
 # All other fields can default to NULL.
 
 CREATE TABLE people (
-    people_id int,
-    people_last_name varchar(256) NOT NULL,
+    people_id int NOT NULL,
+    people_first_name varchar(255),
+    people_last_name varchar(255) NOT NULL,
+    people_email varchar(255),
+    people_linkedin_url varchar(255),
+    people_headshot_url varchar(255),
+    people_discord_handle varchar(255),
+    people_brief_bio varchar(255),
+    people_date_joined date NOT NULL,
     PRIMARY KEY (people_id)
+
 );
 
 # Section 5
@@ -51,13 +80,28 @@ CREATE TABLE people (
 # Their last names must exactly be “Person 1”, “Person 2”, etc.
 # Other fields are for you to assign.
 
-insert into people (people_id,people_last_name) values (1,'Person 1');
+INSERT INTO people (people_id, people_first_name, people_last_name, people_email, people_date_joined)
+VALUES 
+(1, "Ava", "Flavo", "Flavo2u@gmail.com", '2000-01-01'),
+(2, "Albert", "Negron", "NegroniA@gmail.com", '2000-01-13'),
+(3, "Carter", "Green", "GreenCart@gmail.com", '2005-10-07'),
+(4, "Julia", "Wood", "JuledWoods@gmail.com", '2003-05-16'),
+(5, "Alex", "Waters", "AWWaters@gmail.com", '2008-08-21'),
+(6, "Tyler", "Palacios", "PalaciosTT@gmail.com", '2012-09-29');
+
 
 
 # Section 6
 # Create peopleskills( id, skills_id, people_id, date_acquired )
-# None of the fields can ba NULL. ID can be auto_increment.
+# None of the fields can be NULL. ID can be auto_increment.
 
+CREATE TABLE peopleskills (
+    peopleskills_id int NOT NULL AUTO_INCREMENT,
+    peopleskills_skills_id int NOT NULL,
+    peopleskills_people_id int NOT NULL,
+    peopleskills_date_acquired date NOT NULL,
+    PRIMARY KEY (peopleskills_id)
+);
 
 # Section 7
 # Populate peopleskills such that:
@@ -73,24 +117,71 @@ insert into people (people_id,people_last_name) values (1,'Person 1');
 # Person 10 has skills 1,4,5;
 # Note that no one has yet acquired skills 7 and 8.
  
+INSERT INTO peopleskills (peopleskills_skills_id, peopleskills_people_id, peopleskills_date_acquired)
+VALUES
+(1, 1, '2000-01-01'),
+(3, 1, '2000-01-01'),
+(6, 1, '2000-01-01'),
+(3, 2, '2000-01-01'),
+(4, 2, '2000-01-01'),
+(5, 2, '2000-01-01'),
+(1, 3, '2000-01-01'),
+(5, 3, '2000-01-01'),
+(6, 5, '2000-01-01'),
+(2, 6, '2000-01-01'),
+(3, 6, '2000-01-01'),
+(4, 6, '2000-01-01'),
+(3, 7, '2000-01-01'),
+(5, 7, '2000-01-01'),
+(6, 7, '2000-01-01'),
+(1, 8, '2000-01-01'),
+(3, 8, '2000-01-01'),
+(5, 8, '2000-01-01'),
+(6, 8, '2000-01-01'),
+(2, 9, '2000-01-01'),
+(5, 9, '2000-01-01'),
+(6, 9, '2000-01-01'),
+(1, 10, '2000-01-01'),
+(4, 10, '2000-01-01'),
+(5, 10, '2000-01-01');
 
 # Section 8
 # Create roles( id, name, sort_priority )
 # sort_priority is an integer and is used to provide an order for sorting roles
 
-
+CREATE TABLE roles(
+    roles_id int NOT NULL,
+    roles_name varchar(255),
+    roles_sort_priority int,
+    PRIMARY KEY (roles_id)
+);
 
 # Section 9
 # Populate roles
 # Designer, Developer, Recruit, Team Lead, Boss, Mentor
 # Sort priority is assigned numerically in the order listed above (Designer=10, Developer=20, Recruit=30, etc.)
 
-
+INSERT INTO roles(roles_id,roles_name,roles_sort_priority) values
+    (1,'Designer',10),
+    (2,'Developer',20),
+    (3,'Recruit',30),
+    (4,'Team Lead',40),
+    (5,'Boss',50),
+    (6,'Mentor',60);
 
 # Section 10
 # Create peopleroles( id, people_id, role_id, date_assigned )
 # None of the fields can be null.  ID can be auto_increment
 
+CREATE TABLE peopleroles(
+    peopleroles_id int NOT NULL AUTO_INCREMENT,
+    peopleroles_people_id int NOT NULL,
+    peopleroles_role_id int NOT NULL,
+    peopleroles_date_assigned date NOT NULL,
+    PRIMARY KEY (peopleroles_id),
+    FOREIGN KEY (peopleroles_people_id) REFERENCES peopleskills(peopleskills_id),
+    FOREIGN KEY (peopleroles_role_id) REFERENCES roles(roles_id)
+);
 
 
 # Section 11
@@ -106,3 +197,20 @@ insert into people (people_id,people_last_name) values (1,'Person 1');
 # Person 9 is Developer
 # Person 10 is Developer and Designer
 
+INSERT INTO peopleroles (peopleroles_people_id, peopleroles_role_id,peopleroles_date_assigned)
+VALUES
+(1, 2, '2000-01-01'),
+(2, 5, '2000-01-01'),
+(2, 6, '2000-01-01'),
+(3, 2, '2000-01-01'),
+(3, 4, '2000-01-01'),
+(4, 3, '2000-01-01'),
+(5, 3, '2000-01-01'),
+(6, 1, '2000-01-01'),
+(6, 2, '2000-01-01'),
+(7, 1, '2000-01-01'),
+(8, 1, '2000-01-01'),
+(8, 4, '2000-01-01'),
+(9, 2, '2000-01-01'),
+(10, 1, '2000-01-01'),
+(10, 2, '2000-01-01');
