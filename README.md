@@ -1,1 +1,3 @@
 # cmsc508-fa2023-hw7-template
+
+This is the repository for HW7 of CMSC508 Fall 2023, more information can be found in the HW7 file that contains the source code and quarto rendering of this assignment. The projects goal is to create an employee database for a new company of "frankenstein" employees to allow for better management of them. In this database, employees have ids and basic facts about them, as well as some skills that are shared throughout the company. The database accounts for the relationships between them and allows users to query them easier as shown off in the HW7 quarto rendering.
